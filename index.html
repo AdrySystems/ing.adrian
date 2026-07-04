@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta de Presentación Digital - Adry System's</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Carga de Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f0f4f8; 
+        }
+        .card-container {
+            width: 100%;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        @media (min-width: 450px) {
+            .card-container {
+                max-width: 420px;
+                margin: 2rem auto;
+                min-height: calc(100vh - 4rem);
+                border-radius: 24px;
+                overflow: hidden;
+            }
+        }
+        .main-bg {
+            background-image: url('https://lh3.googleusercontent.com/d/1gbMlRTxGv_YnHnCWi9VmyGomOwh2wG4V');
+            background-size: cover;
+            background-position: center;
+            height: 200px;
+        }
+        .content-section {
+            background: linear-gradient(180deg, #005f73 0%, #0a9396 100%);
+            margin-top: -60px;
+            border-top-left-radius: 50px;
+            border-top-right-radius: 50px;
+            position: relative;
+            padding-bottom: 2rem;
+            flex-grow: 1;
+        }
+        .profile-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-top: -105px;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+        }
+        .profile-container:hover, .profile-container:active {
+            transform: scale(1.12);
+        }
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border: 5px solid #0a9396;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .verification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #3b82f6;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+        .action-btn {
+            background-color: #ee9b00;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        .action-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(238, 155, 0, 0.4);
+        }
+        .social-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .social-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        .footer-banner {
+            background-color: #e9d8a6;
+            color: #001219;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 37, 46, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: #ffffff;
+            border-radius: 20px;
+            max-width: 90%;
+            width: 500px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 5px solid #e9d8a6;
+            opacity: 0;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #f0f4f8;
+            position: relative;
+        }
+        .modal-header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            color: #005f73;
+            max-width: calc(100% - 90px);
+            margin: 0 auto;
+        }
+        .modal-header-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background-color: #ee9b00;
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: #f0f4f8;
+            color: #005f73;
+            border-radius: 99px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            border: none;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .modal-close-btn:hover {
+            background-color: #e9d8a6;
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-200">
+
+    <div class="card-container">
+        <div class="main-bg"></div>
+        <div class="content-section">
+            <div class="flex flex-col items-center px-6 text-center">
+                <div class="profile-container">
+                    <img src="https://lh3.googleusercontent.com/d/1H3ON4CsTSUJVdNeiy7TC575caVuqnKPL" 
+                         alt="Foto de perfil"
+                         onerror="this.onerror=null; this.src='https://placehold.co/300x300/005f73/ffffff?text=AS';"
+                         class="profile-pic object-cover rounded-full w-full h-full">
+                    <div class="verification-badge">
+                        <i class="fas fa-check text-sm"></i>
+                    </div>
+                </div>
+                
+                <h1 class="text-3xl font-bold text-white mt-4 tracking-tight">Adry System's</h1>
+                <p class="text-lg text-amber-200 font-semibold mt-1">Ing. Adrian Cipriano Lara</p>
+                <p class="text-sm text-white opacity-80 mt-0.5">Servicios de TI & Soluciones Tecnológicas</p>
+                
+                <p class="text-white opacity-90 mt-4 max-w-sm italic text-sm leading-relaxed">"Hacemos que la tecnología sea tu mejor aliada. Soporte, desarrollo y asesoría, todo en un mismo lugar y pensado para ti".</p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 w-full max-w-xs mx-auto mt-8">
+                    <div id="info-btn" class="action-btn flex-1 flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-full text-base whitespace-nowrap text-center">
+                        <i class="fas fa-shield-halved text-white text-lg"></i>
+                        <span class="text-white">Nuestra marca</span>
+                    </div>
+                    <a href="tel:4521714017" class="action-btn flex-1 flex items-center justify-center gap-2 font-semibold py-3 px-4 rounded-full text-base whitespace-nowrap text-center">
+                        <i class="fas fa-phone-alt text-white"></i>
+                        <span>Llamar</span>
+                    </a>
+                </div>
+                
+                <p class="text-white opacity-80 mt-8 text-center">Toca los íconos para interactuar</p>
+
+                <div class="grid grid-cols-4 gap-3 w-full max-w-sm mx-auto mt-4">
+                    <div id="services-btn" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl cursor-pointer">
+                        <i class="fas fa-cubes text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Servicios</span>
+                    </div>
+                    <div id="horario-btn" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl cursor-pointer">
+                        <i class="fas fa-clock text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Horario</span>
+                    </div>
+                    <div id="qr-code-btn" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl cursor-pointer">
+                        <i class="fas fa-qrcode text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Código QR</span>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=19.6069923,-102.2356922" target="_blank" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Ubicación</span>
+                    </a>
+                    <a href="https://www.facebook.com/CLAdrian3" target="_blank" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl">
+                        <i class="fab fa-facebook-f text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/ing_adrianc/" target="_blank" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl">
+                        <i class="fab fa-instagram text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Instagram</span>
+                    </a>
+                    <a href="https://wa.me/524521714017" target="_blank" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">WhatsApp</span>
+                    </a>
+                    <div id="save-contact-btn" class="social-btn flex flex-col justify-center items-center py-3 w-full h-20 rounded-2xl cursor-pointer">
+                        <i class="fas fa-save text-2xl"></i>
+                        <span class="text-xs mt-2 font-medium">Guardar</span>
+                    </div>
+                </div>
+
+                <div id="install-btn" class="text-white opacity-80 mt-8 text-center cursor-pointer hover:opacity-100 transition underline">
+                    ¿Cómo instalar en mi dispositivo?
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-banner text-center py-4 px-4 font-semibold">
+            <p>Te ofrecemos un servicio tecnológico de calidad a bajo costo...</p>
+            <a href="mailto:contacto@adrysystems.com" class="block text-sm text-[#005f73] hover:underline mt-2 font-normal">ing.adrian.cipriano.lara@gmail.com</a>
+        </div>
+    </div>
+
+    <!-- MODAL DE NUESTRA MARCA -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-header-title">Nuestra marca</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body text-center flex flex-col items-center justify-center">
+                <p class="text-gray-600 mb-4 font-medium">Sello de Calidad e Innovación</p>
+                <div class="w-64 h-64 rounded-full border-4 border-[#e9d8a6] shadow-xl overflow-hidden bg-white flex items-center justify-center mb-4 transition-transform hover:scale-105 duration-300">
+                     <img src="https://lh3.googleusercontent.com/d/1ztEEcEstPNeW8oseiX0bQ9FCLWmgd8ZV" 
+                          alt="Logo Circular Adry System's" 
+                          class="w-full h-full object-cover">
+                </div>
+                <p class="text-xs text-gray-400 mt-2">Desarrollado y respaldado por el Ing. Adrian Cipriano Lara.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE SERVICIOS -->
+    <div id="services-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-header-title">Nuestros Servicios</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="flex flex-col gap-3">
+                    <script>
+                        function toggleAccordion(id) {
+                            const content = document.getElementById(id);
+                            const icon = document.getElementById('icon-' + id);
+                            content.classList.toggle('hidden');
+                            icon.classList.toggle('rotate-180');
+                        }
+                    </script>
+
+                    <!-- Servicio 1 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-1')">
+                                <i class="fas fa-headset text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Asesoría y soporte técnico</h3>
+                                <i id="icon-serv-1" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Asesoría y soporte técnico" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-1" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">¿Tu computadora va lenta o tiene errores? Ofrezco ayuda personalizada, ya sea remotamente o en tu domicilio, para diagnosticar y solucionar cualquier falla, asegurando que tus equipos funcionen como nuevos.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 2 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-2')">
+                                <i class="fas fa-tools text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Mantenimiento y reparación</h3>
+                                <i id="icon-serv-2" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Mantenimiento y reparación" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-2" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">Dales una segunda oportunidad a tus equipos. Realizo limpieza física interna para evitar sobrecalentamiento, reparación de piezas dañadas y mantenimiento preventivo para que tu tecnología dure mucho más tiempo.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 3 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-3')">
+                                <i class="fas fa-video text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Instalación de cámaras</h3>
+                                <i id="icon-serv-3" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Instalación de cámaras" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-3" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">Protege lo que más importa. Instalo y configuro sistemas de cámaras de seguridad (CCTV) para tu casa o negocio, permitiéndote monitorear todo desde tu celular en tiempo real con total facilidad.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 4 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-4')">
+                                <i class="fas fa-code text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Desarrollo de software</h3>
+                                <i id="icon-serv-4" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Desarrollo de software" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-4" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">¿Tienes una idea para una app o necesitas un sistema para gestionar tu negocio? Desarrollamos soluciones digitales a medida para automatizar tus tareas y hacer tu trabajo diario mucho más sencillo y eficiente.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 5 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-5')">
+                                <i class="fas fa-laptop-code text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Diseño Web</h3>
+                                <i id="icon-serv-5" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Diseño Web" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-5" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">Creamos la presencia digital que tu marca necesita. Diseñamos sitios web profesionales que se ven increíbles en cualquier dispositivo, son fáciles de navegar y te ayudan a que más clientes te encuentren.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 6 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-6')">
+                                <i class="fas fa-print text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Impresión de documentos</h3>
+                                <i id="icon-serv-6" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Impresión de documentos" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-6" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">¿Necesitas imprimir tus archivos urgente? Te ayudamos con impresiones rápidas y de calidad, ya sea en blanco y negro o color. Además, realizamos escaneos nítidos de tus documentos importantes.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 7 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-7')">
+                                <i class="fas fa-envelope-open-text text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Invitaciones y tarjetas</h3>
+                                <i id="icon-serv-7" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Invitaciones y tarjetas" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-7" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">Hacemos que tus eventos sean especiales desde la invitación. Diseñamos invitaciones digitales interactivas o tarjetas impresas únicas para bodas, cumpleaños o cualquier celebración que desees.</p>
+                        </div>
+                    </div>
+
+                    <!-- Servicio 8 -->
+                    <div class="border rounded-xl shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between p-3 gap-2 bg-[#e0f2f1]">
+                            <div class="flex items-center gap-3 cursor-pointer flex-grow" onclick="toggleAccordion('serv-8')">
+                                <i class="fas fa-graduation-cap text-[#005f73] text-xl w-6"></i>
+                                <h3 class="font-semibold text-gray-900 text-sm">Apoyo escolar</h3>
+                                <i id="icon-serv-8" class="fas fa-chevron-down text-gray-700 text-xs transition-transform"></i>
+                            </div>
+                            <a href="https://wa.me/524521714017?text=¡Hola Ing. Adrian! , me interesa el servicio de Apoyo escolar" target="_blank" class="bg-green-600 text-white text-[10px] px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+                                <i class="fab fa-whatsapp"></i> Solicitar
+                            </a>
+                        </div>
+                        <div id="serv-8" class="hidden px-4 pb-3 text-xs text-gray-800 bg-[#f1fcfc] border-t border-[#e0f2f1]">
+                            <p class="pt-2">¿Tareas difíciles o proyectos escolares pendientes? Te brindo asesoría académica clara y sencilla para que comprendas mejor tus temas y entregues trabajos escolares excelentes y bien realizados.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE HORARIO -->
+    <div id="horario-modal" class="modal-overlay">
+        <div class="modal-content">
+             <div class="modal-header">
+                <h2 class="modal-header-title">Horario de Atención</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4 text-gray-700">
+                    <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+                        <span class="font-semibold text-[#005f73] flex items-center gap-3"><i class="far fa-calendar-alt w-5 text-center"></i>Lunes a Viernes</span>
+                        <span class="font-mono bg-gray-100 px-2 py-1 rounded">09:00 - 18:00</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-gray-200 pb-3">
+                        <span class="font-semibold text-[#005f73] flex items-center gap-3"><i class="far fa-calendar w-5 text-center"></i>Sábados</span>
+                        <span class="font-mono bg-gray-100 px-2 py-1 rounded">10:00 - 14:00</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold text-red-500 flex items-center gap-3"><i class="far fa-calendar-times w-5 text-center"></i>Domingos</span>
+                        <span class="font-mono bg-red-50 text-red-500 px-2 py-1 rounded">Cerrado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE INSTALACIÓN -->
+    <div id="install-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-header-title">¡Guarda nuestra Tarjeta!</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                 <p class="text-center text-gray-600 mb-6">Lleva los contactos de Adry System's directamente en la pantalla de inicio de tu smartphone para soporte inmediato en cualquier lugar.</p>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div class="flex-1 p-4 bg-gray-50 rounded-lg border">
+                        <h3 class="text-lg font-semibold text-[#005f73] mb-3 flex items-center gap-2"><i class="fab fa-apple"></i> Para iOS (iPhone)</h3>
+                        <ol class="list-decimal list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Toca el ícono de <strong>Compartir</strong> <i class="fas fa-share-square"></i> en Safari.</li>
+                            <li>Selecciona <strong>"Agregar a la pantalla de inicio"</strong>.</li>
+                        </ol>
+                    </div>
+                    <div class="flex-1 p-4 bg-gray-50 rounded-lg border">
+                        <h3 class="text-lg font-semibold text-[#005f73] mb-3 flex items-center gap-2"><i class="fab fa-android"></i> Para Android</h3>
+                        <ol class="list-decimal list-inside text-gray-600 space-y-2 text-sm">
+                            <li>Toca los <strong>tres puntos</strong> <i class="fas fa-ellipsis-v"></i> en Chrome.</li>
+                            <li>Selecciona <strong>"Agregar a la pantalla principal"</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL DE CÓDIGO QR -->
+    <div id="qr-code-modal" class="modal-overlay">
+        <div class="modal-content">
+             <div class="modal-header">
+                <h2 class="modal-header-title">Escanea para Contactar</h2>
+                <button class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="text-gray-600 mb-4">Apunta la cámara de tu smartphone para registrar nuestro contacto de forma automática en tu agenda.</p>
+                <div class="flex justify-center p-2 bg-white rounded-lg border">
+                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BEGIN:VCARD%0AVERSION:3.0%0AFN:Adry%20System's%0ATEL;TYPE=WORK,VOICE:4521714017%0AEMAIL:contacto@adrysystems.com%0AEND:VCARD" alt="Código QR de Contacto" class="rounded-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Gestión de Modales ---
+        const setupModal = (btnId, modalId) => {
+            const btn = document.getElementById(btnId);
+            const modal = document.getElementById(modalId);
+            if(btn && modal) {
+                btn.addEventListener('click', () => modal.classList.add('active'));
+                modal.querySelector('.modal-close-btn').addEventListener('click', () => modal.classList.remove('active'));
+                modal.addEventListener('click', (event) => { if (event.target === modal) modal.classList.remove('active'); });
+            }
+        };
+
+        setupModal('info-btn', 'info-modal');
+        setupModal('services-btn', 'services-modal');
+        setupModal('horario-btn', 'horario-modal');
+        setupModal('install-btn', 'install-modal');
+        setupModal('qr-code-btn', 'qr-code-modal');
+
+        // --- Lógica Guardar Contacto ---
+        const saveContactBtn = document.getElementById('save-contact-btn');
+        if(saveContactBtn) {
+            saveContactBtn.addEventListener('click', () => {
+                const vCard = "BEGIN:VCARD\nVERSION:3.0\nFN:Adry System's\nTEL;TYPE=WORK,VOICE:4521714017\nEMAIL:contacto@adrysystems.com\nORG:Adry System's\nTITLE:Servicios de TI & Soluciones Tecnologicas\nEND:VCARD";
+                const blob = new Blob([vCard], { type: "text/vcard" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = "AdrySystemsContacto.vcf";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+    </script>
+</body>
+</html>
