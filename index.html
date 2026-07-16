@@ -563,28 +563,28 @@
             });
         }
        window.onload = () => {
-    if (typeof renderProducts === 'function') renderProducts();
-
-    const el = document.getElementById('contador-visitas');
-    if (el) {
-        // Usamos counterapi.dev, que es mucho más estable actualmente
-        // (Cambié "mi_tienda_esmeralda" por un ID único para tu proyecto)
-        fetch('https://api.counterapi.dev/v1/mi_tienda_esmeralda/visitas/up')
-            .then(response => {
-                if (!response.ok) throw new Error('Error de conexión');
-                return response.json();
-            })
-            .then(data => {
-                // 'data.count' almacena el número real actualizado en el servidor
-                el.innerHTML = `<i class="fa-solid fa-eye text-[#3b82f6] mr-1.5"></i> Visitas: ${data.count}`;
-            })
-            .catch(error => {
-                console.error("Error al cargar el contador:", error);
-                // Número de emergencia si el servidor falla
-                el.innerHTML = `<i class="fa-solid fa-eye text-[#3b82f6] mr-1.5"></i> Visitas: 150`;
-            });
-    }
-};	
+        if (typeof renderProducts === 'function') renderProducts();
+    
+        const el = document.getElementById('contador-visitas');
+        if (el) {
+            // Usamos counterapi.dev, que es mucho más estable actualmente
+            // (Cambié "mi_tienda_esmeralda" por un ID único para tu proyecto)
+            fetch('https://api.counterapi.dev/v1/mi_tienda_esmeralda/visitas/up')
+                .then(response => {
+                    if (!response.ok) throw new Error('Error de conexión');
+                    return response.json();
+                })
+                .then(data => {
+                    // 'data.count' almacena el número real actualizado en el servidor
+                    el.innerHTML = `<i class="fa-solid fa-eye text-[#3b82f6] mr-1.5"></i> Visitas: ${data.count}`;
+                })
+                .catch(error => {
+                    console.error("Error al cargar el contador:", error);
+                    // Número de emergencia si el servidor falla
+                    el.innerHTML = `<i class="fa-solid fa-eye text-[#3b82f6] mr-1.5"></i> Visitas: 150`;
+                });
+        }
+    };	
 
 
     </script>
